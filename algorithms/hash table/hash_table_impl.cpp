@@ -1,34 +1,14 @@
 #include <stdio.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
+#include <new>
 
-class OpenHashAlgorithms
+#include "hash_table.h"
+
+OpenHashAlgorithms::OpenHashAlgorithms(uint32_t hashTableSize)
 {
-public:
-    OpenHashAlgorithms(uint32_t hashTableSize)
-    {
-        _hashTableSize = hashTableSize;
-    }
-
-    void setHashTableTwoDegree(uint32_t degree);
-
-    uint32_t divisionalHash(uint32_t key);
-    uint32_t multiplicativeHash(uint32_t key);
-    uint8_t addictiveHash(uint8_t *str);
-    uint8_t exclusiveHash(uint8_t *str);
-
-private:
-    void fillRandomArray();
-
-    uint32_t _hashTableSize; // a raw value of hash table size
-    uint32_t _hashTableTwoDegree; // degree of 2 to represent hash table size
-
-    const double _goldenSection = 0.618033; // (sqrt(5) - 1) / 2
-    static const size_t _randArraySize = 256;
-    uint8_t _rand8[_randArraySize]; // an array with random numbers. 256 is a number of possible values
-                                    // stored by uint8_t type variable.
-};
+    _hashTableSize = hashTableSize;
+}
 
 void OpenHashAlgorithms::setHashTableTwoDegree(uint32_t degree)
 {
@@ -73,6 +53,8 @@ void OpenHashAlgorithms::fillRandomArray()
 
 uint8_t OpenHashAlgorithms::exclusiveHash(uint8_t *str)
 {
+    fillRandomArray();
+
     uint8_t hash = 0;
     while (*str)
     {
@@ -82,31 +64,47 @@ uint8_t OpenHashAlgorithms::exclusiveHash(uint8_t *str)
     return hash;
 }
 
-class ClosedHashAlgorithms
+uint16_t OpenHashAlgorithms::exclusiveHashExtended(uint8_t *str)
 {
-public:
-    ClosedHashAlgorithms(uint32_t tableSize)
+    fillRandomArray();
+
+    uint8_t h1, h2;
+
+    if (0 == *str) return 0;
+
+    h1 = *str;
+    h2 = *str + 1;
+
+    ++str;
+
+    while (*str)
     {
-        _hashTableSize = tableSize;
-
-        _hashTable = new (std::nothrow) uint32_t[_hashTableSize];
-        _usedCells = new (std::nothrow) bool[_hashTableSize];
-
-        for (uint32_t i = 0; i < _hashTableSize; ++i)
-        {
-            _usedCells[i] = false;
-        }
+        h1 = _rand8[h1 ^ *str];
+        h2 = _rand8[h2 ^ *str];
+        ++str;
     }
 
-    void add(uint32_t key);
-    bool find(uint32_t key);
-    void remove(uint32_t key);
+    uint16_t out_hash = 0;
+    out_hash = ((uint16_t)h1 << 8) | ((uint16_t)h2);
 
+    return out_hash;
+}
 
-private:
-    uint32_t _hashTableSize;
-    uint32_t *_hashTable;
-    bool *_usedCells;
-};
+ClosedHashAlgorithms::ClosedHashAlgorithms(uint32_t tableSize)
+{
+    _hashTableSize = tableSize;
 
+    _hashTable = new (std::nothrow) uint32_t[_hashTableSize];
+    _usedCells = new (std::nothrow) bool[_hashTableSize];
+
+    for (uint32_t i = 0; i < _hashTableSize; ++i)
+    {
+        _usedCells[i] = false;
+    }
+}
+
+void ClosedHashAlgorithms::add(uint32_t key)
+{
+    
+}
 

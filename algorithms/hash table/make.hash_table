@@ -1,0 +1,13 @@
+all: hash_table
+
+hash_table: hash_table_impl.o hash_table_main.o
+	g++ hash_table_impl.o hash_table_main.o -o hash_table
+
+hash_table_main.o: hash_table_main.cpp hash_table.h
+	g++ -c hash_table_main.cpp
+
+hash_table_impl.o : hash_table_impl.cpp hash_table.h
+	g++ -c hash_table_impl.cpp
+
+clean:
+	rm hash_table*.o hash_table
