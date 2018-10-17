@@ -94,8 +94,8 @@ ClosedHashAlgorithms::ClosedHashAlgorithms(uint32_t tableSize)
 {
     _hashTableSize = tableSize;
 
-    _hashTable = new (std::nothrow) uint32_t[_hashTableSize];
-    _usedCells = new (std::nothrow) bool[_hashTableSize];
+    _hashTable = new (std::nothrow) uint32_t[_hashTableSize]();
+    _usedCells = new (std::nothrow) bool[_hashTableSize]();
 
     for (uint32_t i = 0; i < _hashTableSize; ++i)
     {
