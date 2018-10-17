@@ -1,5 +1,16 @@
 #include <stdint.h>
 
+/*
+ * About hash table size choise
+ * https://stackoverflow.com/a/22745283/2900264
+ */
+
+/*
+ * A collection of hash algorithms
+ * https://en.wikipedia.org/wiki/Jenkins_hash_function
+ */
+
+
 class OpenHashAlgorithms
 {
 public:
